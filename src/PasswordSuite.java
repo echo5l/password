@@ -36,7 +36,8 @@ public class PasswordSuite
             }
             catch (Exception e)
             {
-                System.err.println(e);
+                System.err.printf("\n%s\n\n", e);
+                input = new Scanner(System.in);
             }
         }
     }
