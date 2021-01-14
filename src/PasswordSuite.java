@@ -7,7 +7,9 @@ public class PasswordSuite
     {
         Scanner input = new Scanner(System.in);
         int choice;
-        while (true) 
+        boolean loop = true;
+
+        do
         {
             try 
             {
@@ -28,24 +30,25 @@ public class PasswordSuite
                     case 2:
                         System.out.println("Exiting Program...");
                         input.close();
-                        System.exit(0);
+                        loop = false;
                     default:
-                        System.out.println("\nInvalid Menu Option");
+                        System.out.println("\nInvalid Menu Option!\n");
                         break;
                 }
             }
-            catch (Exception e)
+            catch (Exception e) // InputMismatchException
             {
                 System.err.printf("\n%s\n\n", e);
                 input = new Scanner(System.in);
             }
-        }
+        } while (loop);
     }
 
     public static void findDuplicateChar(String password) 
     {        
         String result = "";
         HashSet<Character> charSet = new HashSet<>();
+        
         for (int i=0; i<password.length(); i++) 
         {
             if (charSet.contains(password.charAt(i))) 
@@ -55,7 +58,7 @@ public class PasswordSuite
             charSet.add(password.charAt(i));
         }
 
-        if (result == "") 
+        if (result.equals("")) 
         {
             System.out.printf("\n\"%s\" has no duplicate character\n\n", password);
         } 
