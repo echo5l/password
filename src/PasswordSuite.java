@@ -147,16 +147,6 @@ public class PasswordSuite
                     }
                     
                 } 
-                // else if (count<specialCount) 
-                // {
-                //     checkSpecialChar = false;
-                //     continue;
-                // }
-                // else 
-                // {
-                //     sb.append(combined.charAt(randomIndex));
-                //     i++;
-                // }
                 sb.append(combined.charAt(randomIndex));
                 i++;
             }
