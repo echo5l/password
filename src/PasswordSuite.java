@@ -1,24 +1,32 @@
 import java.util.*;
 import java.io.*;
+import java.security.SecureRandom;
 
 public class PasswordSuite 
 {
+    final static String upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    final static String lowerCase = "abcdefghijklmnopqrstuvwxyz";
+    final static String numbers   = "0123456789";
+    final static String specialChar = "~`!@#$%^&*()-+_={}[]|\\:\";'<>,.?/";
     public static void main (String args[])
     {
         Scanner input = new Scanner(System.in);
-        int choice;
+        SecureRandom random;
+        int choice, len;
         boolean loop = true;
+        String password;
 
         do
         {
+            System.out.println("\n__Menu Options__: ");
+            System.out.println("1.) Check Duplicate Character");
+            System.out.println("2.) Password Generator");
+            System.out.println("3.) Unique Password Generator");
+            System.out.println("4.) Exit\n");
+
             try 
             {
-                System.out.println("__Menu Options__: ");
-                System.out.println("1.) Check Duplicate Character");
-                System.out.println("2.) Exit");
-
                 choice = input.nextInt();
-                String password;
 
                 switch(choice) 
                 {
@@ -28,9 +36,24 @@ public class PasswordSuite
                         findDuplicateChar(password);
                         break;
                     case 2:
-                        System.out.println("Exiting Program...");
+                        System.out.print("\nEnter password length: ");
+                        len = input.nextInt();
+                        random = new SecureRandom();
+                        password = generateRandomPassword(random, len);
+                        break;
+                    case 3:
+                        System.out.print("\nEnter password length: ");
+                        len = input.nextInt();
+                        System.out.print("Enter number of Special Characters: ");
+                        int numberOfSpecialChar = input.nextInt();
+                        random = new SecureRandom();
+                        password = generateUniqueRandomPassword(random, len, numberOfSpecialChar);
+                        break;
+                    case 4:
+                        System.out.println("Exiting Program...\n");
                         input.close();
                         loop = false;
+                        break;
                     default:
                         System.out.println("\nInvalid Menu Option!\n");
                         break;
@@ -41,30 +64,105 @@ public class PasswordSuite
                 System.err.printf("\n%s\n\n", e);
                 input = new Scanner(System.in);
             }
-        } while (loop);
+        } while(loop);
     }
 
-    public static void findDuplicateChar(String password) 
+    public static String findDuplicateChar(String password) 
     {        
-        String result = "";
+        char[] arrC = new char[password.length()];
+        String duplicate = "";
         HashSet<Character> charSet = new HashSet<>();
+        char c;
         
         for (int i=0; i<password.length(); i++) 
         {
-            if (charSet.contains(password.charAt(i))) 
+            c = password.charAt(i);
+            if (!charSet.add(c))    // duplicate found in hashset
             {
-                result += password.charAt(i);
+                duplicate += c;
+                arrC[i] = c;
             }
-            charSet.add(password.charAt(i));
+            else                    // blank filler for unique char
+            {
+                arrC[i] = '_';
+            }
         }
 
-        if (result.equals("")) 
+        if (duplicate.equals("")) 
         {
-            System.out.printf("\n\"%s\" has no duplicate character\n\n", password);
+            System.out.printf("\n\"%s\" has no duplicate character\n", password);
         } 
-        else 
+        else  System.out.printf("\nDuplicate character for \"%s\" ==> ___%s___\n", password, duplicate);
+
+        System.out.printf("%s\n\n", Arrays.toString(arrC));
+        return Arrays.toString(arrC);
+    }
+
+    // Function to generate random alpha-numeric password of specific length
+    public static String generateRandomPassword(SecureRandom random, int len) {
+        String combined = upperCase + lowerCase + numbers + specialChar;
+
+        StringBuilder sb = new StringBuilder();
+
+        // each iteration of loop choose a character randomly from the given ASCII range
+        // and append it to StringBuilder instance
+        int randomIndex;
+        for (int i = 0; i < len; i++) 
         {
-            System.out.printf("\nDuplicate character for \"%s\" ==> ___%s___\n\n", password, result);
+            randomIndex = random.nextInt(combined.length());
+            sb.append(combined.charAt(randomIndex));
         }
+        System.out.printf("\n%s\n\n", sb.toString());
+
+        return sb.toString();
+    }
+
+    public static String generateUniqueRandomPassword(SecureRandom random, int len, int specialCount) {
+        String combined = upperCase + lowerCase + numbers + specialChar;
+        StringBuilder sb = new StringBuilder();
+
+        HashSet<Integer> uniqueIndex = new HashSet<>();
+        int randomIndex, count=0, i=0;
+        boolean checkSpecialChar;
+        while (i < len) 
+        {
+            randomIndex = random.nextInt(combined.length());
+            if (uniqueIndex.add(randomIndex)) 
+            {
+                checkSpecialChar = specialChar.contains(Character.toString(combined.charAt(randomIndex)));
+                if (checkSpecialChar)   // generate special character up to specialCount
+                {
+                    if (count<specialCount)
+                    {
+                        sb.append(combined.charAt(randomIndex));
+                        i++;
+                        count++;
+                        checkSpecialChar = false;
+                        continue;
+                    }
+                    else 
+                    {
+                        checkSpecialChar = false;
+                        continue;
+                    }
+                    
+                } 
+                // else if (count<specialCount) 
+                // {
+                //     checkSpecialChar = false;
+                //     continue;
+                // }
+                // else 
+                // {
+                //     sb.append(combined.charAt(randomIndex));
+                //     i++;
+                // }
+                sb.append(combined.charAt(randomIndex));
+                i++;
+            }
+        }
+        System.out.printf("\n%s\n\n", sb.toString());
+
+        return sb.toString();
     }
 }
