@@ -13,9 +13,8 @@ public class PasswordSuite
     public static void main (String args[])
     {
         Scanner input = new Scanner(System.in);
-        int choice, len;
+        int choice;
         boolean loop = true;
-        String password;
 
         do
         {
@@ -31,10 +30,12 @@ public class PasswordSuite
                         findDuplicateChar();
                         break;
                     case 2:
-                        password = generateRandomPassword();
+                        // String password = generateRandomPassword();
+                        generateRandomPassword();
                         break;
                     case 3:
-                        password = generateUniqueRandomPassword();
+                        // String password = generateUniqueRandomPassword();
+                        generateUniqueRandomPassword();
                         break;
                     case 4:
                         System.out.println("\nExiting Program...\n");
@@ -150,7 +151,8 @@ public class PasswordSuite
         HashSet<Integer> uniqueIndex = new HashSet<>();
         
         boolean checkSpecialChar;
-        int randomIndex, count=0, i=0;
+        int randomIndex; 
+        int count=0, i=0;
         while (i < len) 
         {
             randomIndex = random.nextInt(combined.length());
