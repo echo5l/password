@@ -4,10 +4,12 @@ import java.security.SecureRandom;
 
 public class PasswordSuite 
 {
-    final static String upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    final static String lowerCase = "abcdefghijklmnopqrstuvwxyz";
-    final static String numbers   = "0123456789";
-    final static String specialChar = "~`!@#$%^&*()-+_={}[]|\\:\";'<>,.?/";
+    private static final IllegalArgumentException ILLEGAL_PASSWORD_SIZE = new IllegalArgumentException("Invalid Password Size!");
+    private static final IllegalArgumentException ILLEGAL_PASSWORD      = new IllegalArgumentException("Invalid Password!");
+    private static final String UPPER_CASE   = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private static final String LOWER_CASE   = "abcdefghijklmnopqrstuvwxyz";
+    private static final String NUMBERS      = "0123456789";
+    private static final String SPECIAL_CHAR = "~`!@#$%^&*()-+_={}[]|\\:\";'<>,.?/";
     public static void main (String args[])
     {
         Scanner input = new Scanner(System.in);
@@ -18,11 +20,7 @@ public class PasswordSuite
 
         do
         {
-            System.out.println("\n__Menu Options__: ");
-            System.out.println("1.) Check Duplicate Character");
-            System.out.println("2.) Password Generator");
-            System.out.println("3.) Unique Password Generator");
-            System.out.println("4.) Exit\n");
+            printMenu();
 
             try 
             {
@@ -31,26 +29,18 @@ public class PasswordSuite
                 switch(choice) 
                 {
                     case 1:
-                        System.out.println("\nEnter String to check for duplicate char: ");
-                        password = input.next();
-                        findDuplicateChar(password);
+                        findDuplicateChar(input);
                         break;
                     case 2:
-                        System.out.print("\nEnter password length: ");
-                        len = input.nextInt();
                         random = new SecureRandom();
-                        password = generateRandomPassword(random, len);
+                        password = generateRandomPassword(input, random);
                         break;
                     case 3:
-                        System.out.print("\nEnter password length: ");
-                        len = input.nextInt();
-                        System.out.print("Enter number of Special Characters: ");
-                        int numberOfSpecialChar = input.nextInt();
                         random = new SecureRandom();
-                        password = generateUniqueRandomPassword(random, len, numberOfSpecialChar);
+                        password = generateUniqueRandomPassword(input, random);
                         break;
                     case 4:
-                        System.out.println("Exiting Program...\n");
+                        System.out.println("\nExiting Program...\n");
                         input.close();
                         loop = false;
                         break;
@@ -67,8 +57,21 @@ public class PasswordSuite
         } while(loop);
     }
 
-    public static String findDuplicateChar(String password) 
-    {        
+    public static void printMenu() 
+    {
+        System.out.println("\n__Menu Options__: ");
+        System.out.println("1.) Check Duplicate Character");
+        System.out.println("2.) Password Generator");
+        System.out.println("3.) Unique Password Generator");
+        System.out.println("4.) Exit");
+    }
+
+    public static String findDuplicateChar(Scanner input) 
+    {     
+        System.out.println("\nEnter String to check for duplicate char: ");
+        String password = input.next();
+        if ((password==null) || password.length()<=0) throw ILLEGAL_PASSWORD;
+    
         char[] arrC = new char[password.length()];
         String duplicate = "";
         HashSet<Character> charSet = new HashSet<>();
@@ -92,16 +95,24 @@ public class PasswordSuite
         {
             System.out.printf("\n\"%s\" has no duplicate character\n", password);
         } 
-        else  System.out.printf("\nDuplicate character for \"%s\" ==> ___%s___\n", password, duplicate);
-
-        System.out.printf("%s\n\n", Arrays.toString(arrC));
+        else 
+        {  
+            System.out.printf("\nDuplicate character for \"%s\" ==> ___%s___\n", password, duplicate);
+            System.out.printf("%s\n\n", Arrays.toString(arrC));
+        }
         return Arrays.toString(arrC);
     }
 
     // Function to generate random alpha-numeric password of specific length
-    public static String generateRandomPassword(SecureRandom random, int len) {
-        String combined = upperCase + lowerCase + numbers + specialChar;
+    public static String generateRandomPassword(Scanner input, SecureRandom random) {
+        System.out.print("\nEnter password length: ");
+        int len;
+        if (!input.hasNextInt()) throw new InputMismatchException("Non-Integer Length!");
+        len = input.nextInt();
+        if (len<1) throw ILLEGAL_PASSWORD_SIZE;
 
+        random = new SecureRandom();
+        String combined = UPPER_CASE + LOWER_CASE + NUMBERS + SPECIAL_CHAR;
         StringBuilder sb = new StringBuilder();
 
         // each iteration of loop choose a character randomly from the given ASCII range
@@ -117,42 +128,52 @@ public class PasswordSuite
         return sb.toString();
     }
 
-    public static String generateUniqueRandomPassword(SecureRandom random, int len, int specialCount) {
-        String combined = upperCase + lowerCase + numbers + specialChar;
-        StringBuilder sb = new StringBuilder();
+    public static String generateUniqueRandomPassword(Scanner input, SecureRandom random) {
+        System.out.print("\nEnter password length: ");
+        int len;
+        if (!input.hasNextInt()) throw new InputMismatchException("Non-Integer Length!");
+        len = input.nextInt();
+        if (len<1) throw ILLEGAL_PASSWORD_SIZE;
 
+        System.out.print("Enter number of Special Characters: ");
+        int numberOfSpecialChar;
+        if (!input.hasNextInt()) throw new InputMismatchException("Non-Integer Special Character Count!");
+        numberOfSpecialChar = input.nextInt();
+        if (numberOfSpecialChar<0) throw new IllegalArgumentException("Invalid Special Character Count!");
+
+        String combined = UPPER_CASE + LOWER_CASE + NUMBERS + SPECIAL_CHAR;
+        StringBuilder ps = new StringBuilder();
         HashSet<Integer> uniqueIndex = new HashSet<>();
-        int randomIndex, count=0, i=0;
+        
         boolean checkSpecialChar;
+        int randomIndex, count=0, i=0;
         while (i < len) 
         {
             randomIndex = random.nextInt(combined.length());
             if (uniqueIndex.add(randomIndex)) 
             {
-                checkSpecialChar = specialChar.contains(Character.toString(combined.charAt(randomIndex)));
-                if (checkSpecialChar)   // generate special character up to specialCount
+                checkSpecialChar = SPECIAL_CHAR.contains(Character.toString(combined.charAt(randomIndex)));
+                if (checkSpecialChar)   // generate special character up to special character count
                 {
-                    if (count<specialCount)
+                    if (count<numberOfSpecialChar)
                     {
-                        sb.append(combined.charAt(randomIndex));
+                        ps.append(combined.charAt(randomIndex));
                         i++;
                         count++;
-                        checkSpecialChar = false;
                         continue;
                     }
                     else 
                     {
-                        checkSpecialChar = false;
                         continue;
                     }
                     
                 } 
-                sb.append(combined.charAt(randomIndex));
+                ps.append(combined.charAt(randomIndex));
                 i++;
             }
         }
-        System.out.printf("\n%s\n\n", sb.toString());
+        System.out.printf("\n%s\n\n", ps.toString());
 
-        return sb.toString();
+        return ps.toString();
     }
 }
