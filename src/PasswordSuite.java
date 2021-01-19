@@ -13,7 +13,6 @@ public class PasswordSuite
     public static void main (String args[])
     {
         Scanner input = new Scanner(System.in);
-        SecureRandom random;
         int choice, len;
         boolean loop = true;
         String password;
@@ -29,15 +28,13 @@ public class PasswordSuite
                 switch(choice) 
                 {
                     case 1:
-                        findDuplicateChar(input);
+                        findDuplicateChar();
                         break;
                     case 2:
-                        random = new SecureRandom();
-                        password = generateRandomPassword(input, random);
+                        password = generateRandomPassword();
                         break;
                     case 3:
-                        random = new SecureRandom();
-                        password = generateUniqueRandomPassword(input, random);
+                        password = generateUniqueRandomPassword();
                         break;
                     case 4:
                         System.out.println("\nExiting Program...\n");
@@ -49,7 +46,7 @@ public class PasswordSuite
                         break;
                 }
             }
-            catch (Exception e) // InputMismatchException
+            catch (InputMismatchException e) 
             {
                 System.err.printf("\n%s\n\n", e);
                 input = new Scanner(System.in);
@@ -66,10 +63,12 @@ public class PasswordSuite
         System.out.println("4.) Exit");
     }
 
-    public static String findDuplicateChar(Scanner input) 
+    public static String findDuplicateChar() 
     {     
+        Scanner in = new Scanner(System.in);
+
         System.out.println("\nEnter String to check for duplicate char: ");
-        String password = input.next();
+        String password = in.next();
         if ((password==null) || password.length()<=0) throw ILLEGAL_PASSWORD;
     
         char[] arrC = new char[password.length()];
@@ -104,11 +103,14 @@ public class PasswordSuite
     }
 
     // Function to generate random alpha-numeric password of specific length
-    public static String generateRandomPassword(Scanner input, SecureRandom random) {
+    public static String generateRandomPassword() {
+        SecureRandom random = new SecureRandom();
+        Scanner in = new Scanner(System.in);
+
         System.out.print("\nEnter password length: ");
         int len;
-        if (!input.hasNextInt()) throw new InputMismatchException("Non-Integer Length!");
-        len = input.nextInt();
+        if (!in.hasNextInt()) throw new InputMismatchException("Non-Integer Length!");
+        len = in.nextInt();
         if (len<1) throw ILLEGAL_PASSWORD_SIZE;
 
         random = new SecureRandom();
@@ -124,21 +126,23 @@ public class PasswordSuite
             sb.append(combined.charAt(randomIndex));
         }
         System.out.printf("\n%s\n\n", sb.toString());
-
         return sb.toString();
     }
 
-    public static String generateUniqueRandomPassword(Scanner input, SecureRandom random) {
+    public static String generateUniqueRandomPassword() {
+        SecureRandom random = new SecureRandom();
+        Scanner in = new Scanner(System.in);
+
         System.out.print("\nEnter password length: ");
         int len;
-        if (!input.hasNextInt()) throw new InputMismatchException("Non-Integer Length!");
-        len = input.nextInt();
+        if (!in.hasNextInt()) throw new InputMismatchException("Non-Integer Length!");
+        len = in.nextInt();
         if (len<1) throw ILLEGAL_PASSWORD_SIZE;
 
         System.out.print("Enter number of Special Characters: ");
         int numberOfSpecialChar;
-        if (!input.hasNextInt()) throw new InputMismatchException("Non-Integer Special Character Count!");
-        numberOfSpecialChar = input.nextInt();
+        if (!in.hasNextInt()) throw new InputMismatchException("Non-Integer Special Character Count!");
+        numberOfSpecialChar = in.nextInt();
         if (numberOfSpecialChar<0) throw new IllegalArgumentException("Invalid Special Character Count!");
 
         String combined = UPPER_CASE + LOWER_CASE + NUMBERS + SPECIAL_CHAR;
@@ -173,7 +177,6 @@ public class PasswordSuite
             }
         }
         System.out.printf("\n%s\n\n", ps.toString());
-
         return ps.toString();
     }
 }
