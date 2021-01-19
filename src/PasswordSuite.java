@@ -1,9 +1,6 @@
 import java.util.*;
 import java.io.*;
 import java.security.SecureRandom;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 import java.util.stream.Collectors;
 
 public class PasswordSuite 
