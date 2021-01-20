@@ -9,16 +9,14 @@ A Java compiler is suffice
 Not much for now..
 
 
-```
-
+    ```
         __Menu Options__:
     1.) Check Duplicate Character
     2.) Password Generator
     3.) Unique Password Generator
     4.) Exit
-
-```
+    ```
 
 #### TODO
-Adding a more features along with my renewed interest in cryptography.
+Add few more features along with my renewed interest in cryptography.
 Learn how to create a docker image for this project.
