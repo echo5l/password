@@ -17,6 +17,13 @@ Not much for now..
     4.) Exit
 ```
 
+#### Tasks
+-[ ] Modify option 1 to replace duplicate with unique characters. Assuming most passwords are less than 94 char long.
+-[ ] Add SHA encrypt
+-[ ] Add SHA decrypt
+-[ ] Add AES encrypt
+-[ ] Add AES decrypt
+
 #### TODO
 Add few more features along with my renewed interest in cryptography.
 Learn how to create a docker image for this project.
