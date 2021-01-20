@@ -5,8 +5,10 @@ public class Password
 
     public static void main (String args[])
     {
-        Scanner input = new Scanner(System.in);
+
         int choice;
+        Scanner input = new Scanner(System.in);
+        PasswordSuite ps = new PasswordSuite();
         boolean loop = true;
 
         do
@@ -15,7 +17,6 @@ public class Password
             try
             {
                 choice = input.nextInt();
-                PasswordSuite ps = new PasswordSuite();
 
                 switch(choice)
                 {
@@ -34,7 +35,7 @@ public class Password
                         loop = false;
                         break;
                     default:
-                        System.out.println("\nInvalid Menu Option!\n");
+                        System.out.printf("\nInvalid Menu Option <%d>\n\n", choice);
                         break;
                 }
             }
@@ -45,6 +46,7 @@ public class Password
             }
 
         } while(loop);
+
     }
 
 

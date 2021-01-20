@@ -5,39 +5,43 @@ import java.util.stream.Collectors;
 
 public class PasswordSuite
 {
-    private static final IllegalArgumentException ILLEGAL_PASSWORD_SIZE  = new IllegalArgumentException("Password length must be >= 1");
-    private static final IllegalArgumentException ILLEGAL_PASSWORD       = new IllegalArgumentException("Invalid Password!");
-    private static final InputMismatchException INPUT_MISMATCH_EXCEPTION = new InputMismatchException("Password length must an integer");
+    private static final IllegalArgumentException ILLEGAL_PASSWORD_SIZE1  = new IllegalArgumentException("Password length must be >= 1");
+    private static final IllegalArgumentException ILLEGAL_PASSWORD_SIZE2  = new IllegalArgumentException("Password length must be < 95");
+    private static final IllegalArgumentException ILLEGAL_PASSWORD        = new IllegalArgumentException("Invalid Password!");
+    private static final InputMismatchException INPUT_MISMATCH_EXCEPTION  = new InputMismatchException("Password length must an integer");
     private static final String UPPER_CASE              = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     private static final String LOWER_CASE              = "abcdefghijklmnopqrstuvwxyz";
     private static final String NUMBERS                 = "0123456789";
     private static final String ASCII_SPECIAL_CHARACTER = "!\"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~";   // ASCII special characters in ascending order
+    private SecureRandom random;
+    private Scanner input;
     private String password;
     private String combined;
     private int combinedLength;
-    private int length;
+    private int passwordLength;
 
     public PasswordSuite() {
+        this.random   = new SecureRandom();
+        this.input    = new Scanner(System.in);
         this.password = null;
         this.combined = UPPER_CASE + LOWER_CASE + NUMBERS + ASCII_SPECIAL_CHARACTER;
         this.combinedLength = combined.length();
-        this.length   = 0;
+        this.passwordLength = 0;
     }
 
     public String findDuplicateChar()
     {
-        Scanner in = new Scanner(System.in);
-
         System.out.println("\nEnter String to check for duplicate char: ");
-        password = in.next();
-        if ((password==null) || password.length()<=0) throw ILLEGAL_PASSWORD;
+        password = input.next();
+        passwordLength = password.length();
+        if ((password==null) || passwordLength<=0) throw ILLEGAL_PASSWORD;
 
-        char[] charArray = new char[password.length()];
+        char[] charArray = new char[passwordLength];
         String duplicate = "";
         HashSet<Character> charSet = new HashSet<>();
         char c;
 
-        for (int i=0; i<password.length(); i++)
+        for (int i=0; i<passwordLength; i++)
         {
             c = password.charAt(i);
             if (!charSet.add(c))        // char c already cached in hashset
@@ -61,19 +65,13 @@ public class PasswordSuite
     // Generate SecureRandom password of specific length
     public String generateRandomPassword()
     {
-        SecureRandom random = new SecureRandom();
-        Scanner in = new Scanner(System.in);
+        passwordLength = getLength();
         StringBuilder ps = new StringBuilder();
-
-        System.out.print("\nEnter password length: ");
-        if (!in.hasNextInt()) throw INPUT_MISMATCH_EXCEPTION;
-        length = in.nextInt();
-        if (length<1) throw ILLEGAL_PASSWORD_SIZE;
 
         // each iteration of loop choose a character randomly from the given ASCII range
         // and append it to StringBuilder instance
         int randomIndex;
-        for (int i=0; i<length; i++)
+        for (int i=0; i<passwordLength; i++)
         {
             randomIndex = random.nextInt(combinedLength);
             ps.append(combined.charAt(randomIndex));
@@ -86,21 +84,11 @@ public class PasswordSuite
     }
 
     // Generate unique random password of specific length + special character upto special character count
+    // Unique password length can only be upto 94 or combined.length()
     public String generateUniqueRandomPassword()
     {
-        SecureRandom random = new SecureRandom();
-        Scanner in = new Scanner(System.in);
-
-        System.out.print("\nEnter password length: ");
-        if (!in.hasNextInt()) throw INPUT_MISMATCH_EXCEPTION;
-        length = in.nextInt();
-        if (length<1) throw ILLEGAL_PASSWORD_SIZE;
-
-        System.out.print("Enter number of Special Characters: ");
-        if (!in.hasNextInt()) throw new InputMismatchException("Special Character count must be an integer");
-        int numberOfSpecialChar = in.nextInt();
-        if (numberOfSpecialChar<0 || numberOfSpecialChar>length)
-            throw new IllegalArgumentException("Special Character Count must be a non-negative int AND <= password length");
+        passwordLength = getLength();
+        int numberOfSpecialChar = getSpecialCharacterCount(passwordLength);
 
         HashSet<Integer> uniqueIndex = new HashSet<>();
         StringBuilder ps = new StringBuilder();
@@ -108,7 +96,9 @@ public class PasswordSuite
         int randomIndex;
         boolean checkSpecialChar;
         int count=0, i=0;
-        while (i<length)
+
+        // first pass only generate *unique password upto combine.length(), i.e. <= 94
+        while (i<passwordLength && i<=combinedLength)
         {
             randomIndex = random.nextInt(combinedLength);
             if (uniqueIndex.add(randomIndex))
@@ -135,11 +125,33 @@ public class PasswordSuite
         return password;
     }
 
+
+    /****************************************************/
     // Helper method to shuffle password for good measure
     public String shuffled(String word)
     {
         List<String> ps = Arrays.asList(word.split(""));
         Collections.shuffle(ps);
         return ps.stream().collect(Collectors.joining());
+    }
+
+    public int getLength()
+    {
+        System.out.print("\nEnter password length: ");
+        if (!input.hasNextInt()) throw INPUT_MISMATCH_EXCEPTION;
+        int length = input.nextInt();
+        if (length<1) throw ILLEGAL_PASSWORD_SIZE1;
+        else if (length>combinedLength) throw ILLEGAL_PASSWORD_SIZE2;
+        return length;
+    }
+
+    public int getSpecialCharacterCount(int passwordLength)
+    {
+        System.out.print("Enter number of Special Characters: ");
+        if (!input.hasNextInt()) throw new InputMismatchException("Special Character count must be an integer");
+        int numberOfSpecialChar = input.nextInt();
+        if (numberOfSpecialChar<0 || numberOfSpecialChar>passwordLength)
+            throw new IllegalArgumentException("Special Character Count must be a non-negative int AND <= password length");
+        return numberOfSpecialChar;
     }
 }
