@@ -8,10 +8,10 @@ public class PasswordSuite
     private static final IllegalArgumentException ILLEGAL_PASSWORD_SIZE  = new IllegalArgumentException("Invalid Password Size!");
     private static final IllegalArgumentException ILLEGAL_PASSWORD       = new IllegalArgumentException("Invalid Password!");
     private static final InputMismatchException INPUT_MISMATCH_EXCEPTION = new InputMismatchException("Non-Integer Size");
-    private static final String UPPER_CASE        = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    private static final String LOWER_CASE        = "abcdefghijklmnopqrstuvwxyz";
-    private static final String NUMBERS           = "0123456789";
-    private static final String SPECIAL_CHARACTER = "~`!@#$%^&*()-+_={}[]|\\:\";'<>,.?/";
+    private static final String UPPER_CASE              = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private static final String LOWER_CASE              = "abcdefghijklmnopqrstuvwxyz";
+    private static final String NUMBERS                 = "0123456789";
+    private static final String ASCII_SPECIAL_CHARACTER = "!\"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~";   // ASCII special characters in ascending order
 
     public static void main (String args[])
     {
@@ -113,7 +113,7 @@ public class PasswordSuite
         int len = in.nextInt();
         if (len<1) throw ILLEGAL_PASSWORD_SIZE;
 
-        String combined = UPPER_CASE + LOWER_CASE + NUMBERS + SPECIAL_CHARACTER;
+        String combined = UPPER_CASE + LOWER_CASE + NUMBERS + ASCII_SPECIAL_CHARACTER;
         StringBuilder ps = new StringBuilder();
 
         // each iteration of loop choose a character randomly from the given ASCII range
@@ -148,7 +148,7 @@ public class PasswordSuite
         if (numberOfSpecialChar<0 || numberOfSpecialChar>len)
             throw new IllegalArgumentException("Invalid Special Character Count!");
 
-        String combined = UPPER_CASE + LOWER_CASE + NUMBERS + SPECIAL_CHARACTER;
+        String combined = UPPER_CASE + LOWER_CASE + NUMBERS + ASCII_SPECIAL_CHARACTER;
         HashSet<Integer> uniqueIndex = new HashSet<>();
         StringBuilder ps = new StringBuilder();
 
@@ -160,7 +160,7 @@ public class PasswordSuite
             randomIndex = random.nextInt(combined.length());
             if (uniqueIndex.add(randomIndex))
             {
-                checkSpecialChar = SPECIAL_CHARACTER.contains(Character.toString(combined.charAt(randomIndex)));
+                checkSpecialChar = ASCII_SPECIAL_CHARACTER.contains(Character.toString(combined.charAt(randomIndex)));
                 if (checkSpecialChar)
                 {   // generate special character up to special character count
                     if (count<numberOfSpecialChar) {
