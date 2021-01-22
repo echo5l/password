@@ -24,18 +24,16 @@ Password Generator and Unique Password Generator fall under the categories of pe
 Permutation *with* repetition:
 > P = n<sup>r</sup> | n = 94, r > 0<br>
 > - n is the pool of characters to choose from in "combined" and r is the length of the password<br>
-> - P = n\*...\*n<br>
+> - P = n \*...\* n<br>
 
-Permutation *without* repetition: ![\Large x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}](https://latex.codecogs.com/svg.latex?x%3D%5Cfrac%7B-b%5Cpm%5Csqrt%7Bb%5E2-4ac%7D%7D%7B2a%7D)
-> P = $ \frac{n!}{(n-r)!} $     | n = 94, 0 < r <= n<br>
-> - P = (n)\*(n-1)\*(n-2)...\*1<br>
+Permutation *without* repetition:
+> P = n! / (n-r)!     | n = 94, 0 < r <= n<br>
+> - P = (n) \* (n-1) \* (n-2) \*...\* 1<br>
 > - P = n! when r = n<br>
 
 n! < n<sup>n</sup>, with both approaching upper limit of O(n<sup>n</sup>)
 
 As a general rule, choose random generated password that has no discernible "word" with length > 8 to mitigate the possibility of dictionary attack and brute force attack respectively.
-
-<img src="https://render.githubusercontent.com/render/math?math=e^{i \pi} = -1">
 
 
 ### Tasks
