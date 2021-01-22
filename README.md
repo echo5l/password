@@ -27,11 +27,11 @@ Permutation *with* repetition:
 > - P = n \*...\* n<br>
 
 Permutation *without* repetition:
-> P = n! / (n-r)! | n = 94, 0 < r <= n<br>
+> P = n! / (n-r)! | n = 94, 0 <= r <= n<br>
 > - P = (n) \* (n-1) \* (n-2) \*...\* 1<br>
 > - P = n! when r = n<br>
 
-n! < n<sup>n</sup>, with both approaching upper limit of O(n<sup>n</sup>)
+n! < n<sup>n</sup>, with both having the time complexity of O(n<sup>n</sup>).
 
 As a general rule, choose random generated password that has no discernible "word" with length > 8 to mitigate the possibility of dictionary attack and brute force attack respectively.
 
