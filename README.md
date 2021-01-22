@@ -9,7 +9,6 @@ A Java compiler is suffice.
 ### Does it do anything?
 Not much for now ...
 
-
 ```
         __Menu Options__:
     1.) Check Duplicate Character
@@ -17,6 +16,7 @@ Not much for now ...
     3.) Unique Password Generator
     4.) Exit
 ```
+
 
 ### Discussion
 Unique Password Generator is a personal preference and should by no mean be perceived as being more secured.
@@ -27,13 +27,16 @@ Permutation *with* repetition:
 > - P = n \*...\* n<br>
 
 Permutation *without* repetition:
-> P = n! / (n-r)!     | n = 94, 0 < r <= n<br>
+> P = n! / (n-r)! | n = 94, 0 < r <= n<br>
 > - P = (n) \* (n-1) \* (n-2) \*...\* 1<br>
 > - P = n! when r = n<br>
 
 n! < n<sup>n</sup>, with both approaching upper limit of O(n<sup>n</sup>)
 
 As a general rule, choose random generated password that has no discernible "word" with length > 8 to mitigate the possibility of dictionary attack and brute force attack respectively.
+
+
+---
 
 
 ### Tasks
