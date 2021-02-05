@@ -19,19 +19,19 @@ Not much for now ...
 
 
 ### Discussion
-Unique Password Generator is a personal preference and should by no mean be perceived as being more secured.
+Unique Password Generator is a personal preference and by no mean be perceived as advantageous in term of security.
 Password Generator and Unique Password Generator fall under the categories of permutation *with* repetition and permutation *without* repetition respectively.<br><br>
 Permutation *with* repetition:
-> P = n<sup>r</sup> | n = 94, r > 0<br>
-> - n is the pool of characters to choose from in "combined" and r is the length of the password<br>
-> - P = n \*...\* n<br>
+> P = n<sup>r</sup> | n = combinedLength, r > 0<br>
+> - n is the pool of characters to choose from which is 94; and r is the length of the password greater than zero<br>
+> - P = n<sup>n</sup> when r = n<br>
 
 Permutation *without* repetition:
-> P = n! / (n-r)! | n = 94, 0 < r <= n<br>
-> - P = (n) \* (n-1) \* (n-2) \*...\* 1<br>
+> P = n! / (n - r)! | n = 94, 0 <= r <= n<br>
+> - P = (n) \* (n-1) \* (n-2) \*...<br>
 > - P = n! when r = n<br>
 
-n! < n<sup>n</sup>, with both approaching upper limit of O(n<sup>n</sup>)
+n! < n<sup>n</sup>, and both bounded by time complexity of O(n<sup>n</sup>).
 
 As a general rule, choose random generated password that has no discernible "word" with length > 8 to mitigate the possibility of dictionary attack and brute force attack respectively.
 

@@ -8,12 +8,14 @@ public class Password
 
         int choice;
         Scanner input = new Scanner(System.in);
-        PasswordSuite ps = new PasswordSuite();
+        PasswordSuite ps;
         boolean loop = true;
 
         do
         {
             printMenu();
+            ps = new PasswordSuite();
+
             try
             {
                 choice = input.nextInt();
