@@ -133,7 +133,7 @@ public class PasswordSuite
 
 
     /****************************************************/
-    // Helper method to shuffle password for good measure
+    // Shuffle password for good measure
     public String shuffled(String word)
     {
         List<String> ps = Arrays.asList(word.split(""));
